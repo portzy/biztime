@@ -1,10 +1,11 @@
-/** Database setup for BizTime. */
-const { Client } = require("pg");
+// db.js
 
-const client = new Client({
-  connectionString: "postgresql://localhost/biztime"
+const { Pool } = require('pg');
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL || "postgresql://localhost/biztime"
 });
 
-client.connect();
-
-module.exports = client;
+module.exports = {
+    query: (text, params) => pool.query(text, params),
+    close: () => pool.end() 
+};
